@@ -1,0 +1,16 @@
+mesh.position.length - расстояние от меша до центра сцены
+mesh.position.distanceTo(camera.position) - расстояние от камеры до объекта
+mesh.position.normalize() - скорректировать положение меша, выставив его length к 1
+
+mesh.position.set(x,y,z)
+mesh.scale.set(x,y,z)
+
+mesh.rotation.xyz
+mesh.rotation.reorder()
+
+camera.lookAt(mesh.position)
+
+new THREE.AxesHelper()
+
+const clock = new THREE.Clock(); - вызывается снаружи функции
+const elapsedTime = clock.getElapsedTime(); - вызывается внутри функции. возвращает время прошедшее с вызова THREE.Clock()

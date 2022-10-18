@@ -1,0 +1,11 @@
+Model Information:
+* title:	Stylized Rocks Asset Pack
+* source:	https://sketchfab.com/3d-models/stylized-rocks-asset-pack-480403c4689a425db3748baa88ad52c4
+* author:	Gebus (https://sketchfab.com/deadzik)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Stylized Rocks Asset Pack" (https://sketchfab.com/3d-models/stylized-rocks-asset-pack-480403c4689a425db3748baa88ad52c4) by Gebus (https://sketchfab.com/deadzik) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
