@@ -1,22 +1,23 @@
 import * as THREE from "three";
 import Main from "../Main";
+import {GLTF} from "three/examples/jsm/loaders/GLTFLoader";
 
 export default class Fence {
+    main = new Main();
+    resources = this.main.resources;
+    addLastMesh = this.main.world.addLastMesh;
+    moveGroup = this.main.world.moveGroup;
+
+    mesh: THREE.Object3D;
+    group = new THREE.Group();
+    FENCE_LENGTH = 5.5;
+
     constructor() {
-        this.main = new Main();
-        this.resources = this.main.resources;
-        this.addLastMesh = this.main.world.addLastMesh;
-        this.moveGroup = this.main.world.moveGroup;
-
-        this.mesh = null;
-        this.group = new THREE.Group();
-        this.FENCE_LENGTH = 5.5;
-
         this.setModel();
     }
 
     setModel() {
-        this.mesh = this.resources.items.fence.scene;
+        this.mesh = (this.resources.items.fence as GLTF).scene;
         this.mesh.rotation.y = Math.PI * 2;
         this.mesh.scale.set(3.5, 3.5, 3.5);
         this.mesh.traverse(child => {

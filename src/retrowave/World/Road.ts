@@ -1,37 +1,44 @@
 import * as THREE from "three";
 import Main from "../Main";
 import {setDefaultForAllTextures} from "../js/textureHandlers";
+import {Texture} from "three";
+
+type textures = {
+
+}
 
 export default class Road {
+    main = new Main();
+    scene = this.main.scene;
+    resources = this.main.resources;
+    addLastMesh = this.main.world.addLastMesh;
+    moveGroup = this.main.world.moveGroup;
+    textures: {[key: string]: Texture}
+
+    group = new THREE.Group();
+    ROAD_LENGTH = 40;
+
+
     constructor() {
-        this.main = new Main();
-        this.scene = this.main.scene;
-        this.resources = this.main.resources;
-        this.addLastMesh = this.main.world.addLastMesh;
-        this.moveGroup = this.main.world.moveGroup;
-
-        this.group = new THREE.Group();
-        this.ROAD_LENGTH = 40;
-        this.roadGeometry = null;
-        this.roadMaterial = null;
-
         this.setGeometry();
         this.setMaterial();
         this.setMesh();
     }
 
     setGeometry() {
+        //@ts-ignore;
         this.roadGeometry = new THREE.PlaneBufferGeometry(this.ROAD_LENGTH, 40, 1000, 1000);
+        //@ts-ignore;
         this.roadGeometry.setAttribute('uv2', new THREE.Float32BufferAttribute(this.roadGeometry.attributes.uv, 2));
     }
 
     setMaterial() {
         this.textures = {
-            map: this.resources.items.roadColor,
-            aoMap: this.resources.items.roadAO,
-            normalMap: this.resources.items.roadNormal,
-            metallicness: this.resources.items.roadMetallic,
-            roughnessMap: this.resources.items.roadRoughness,
+            map: this.resources.items.roadColor as Texture,
+            aoMap: this.resources.items.roadAO as Texture,
+            normalMap: this.resources.items.roadNormal as Texture,
+            metallicness: this.resources.items.roadMetallic as Texture,
+            roughnessMap: this.resources.items.roadRoughness as Texture,
             // displacementMap: this.resources.items.roadHeight,
         }
 
@@ -42,6 +49,7 @@ export default class Road {
             ], repeat: {x: 8, y: 8}, anisotropy: 8
         })
 
+        //@ts-ignore;
         this.roadMaterial = new THREE.MeshStandardMaterial({
             // color: 0x023788,
             ...this.textures,
@@ -55,7 +63,9 @@ export default class Road {
 
     setMesh() {
         this.addLastMesh({
+            //@ts-ignore;
             geometry: this.roadGeometry,
+            //@ts-ignore;
             material: this.roadMaterial,
             placeToAdd: this.group,
             meshNumber: 3,

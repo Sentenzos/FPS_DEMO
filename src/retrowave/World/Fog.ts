@@ -2,11 +2,11 @@ import * as THREE from "three";
 import Main from "../Main";
 
 export default class Fog {
-    constructor() {
-        this.main = new Main();
-        this.scene = this.main.scene;
-        this.fog = null;
+    main = new Main();
+    scene = this.main.scene;
+    fog: THREE.Fog;
 
+    constructor() {
         this.setFog();
     }
 

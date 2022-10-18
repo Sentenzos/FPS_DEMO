@@ -3,13 +3,19 @@ import {getRandomArbitrary} from "./World";
 import starsVertexShader from "../shaders/stars/vertex.glsl";
 import starsFragmentShader from "../shaders/stars/fragment.glsl";
 import Main from "../Main";
+import {randFloat} from "three/src/math/MathUtils";
+import {BufferGeometry, Points, ShaderMaterial} from "three";
 
 export default class Stars {
-    constructor() {
-        this.main = new Main();
-        this.scene = this.main.scene;
-        this.sizes = this.main.sizes;
+    main = new Main();
+    scene = this.main.scene;
+    sizes = this.main.sizes;
 
+    geometry: BufferGeometry;
+    material: ShaderMaterial;
+    points: Points;
+
+    constructor() {
         this.setGeometry();
         this.setMaterial();
         this.setMesh();
@@ -25,9 +31,9 @@ export default class Stars {
         for (let i = 0; i < count; i++) {
             const i3 = i * 3;
 
-            const randomX = THREE.Math.randFloat(-500, 500);
-            const randomY = THREE.Math.randFloat(5, 500);
-            const randomZ = THREE.Math.randFloat(-500, 500);
+            const randomX = randFloat(-500, 500);
+            const randomY = randFloat(5, 500);
+            const randomZ = randFloat(-500, 500);
 
             positions[i3] = randomX;
             positions[i3 + 1] = randomY;

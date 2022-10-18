@@ -1,7 +1,14 @@
 import Main from "../Main";
 import {setEnvironmentIntensity} from "./World";
+import {Object3D} from "three";
+import {GLTF} from "three/examples/jsm/loaders/GLTFLoader";
 
 export default class City {
+    main = new Main();
+    scene = this.main.scene;
+    resources = this.main.resources;
+    city: Object3D;
+
     constructor() {
         this.main = new Main();
         this.scene = this.main.scene;
@@ -12,7 +19,7 @@ export default class City {
     }
 
     setModel() {
-        this.city = this.resources.items.city.scene;
+        this.city = (this.resources.items.city as GLTF).scene;
         setEnvironmentIntensity(this.city, 10);
         this.city.position.x = 200;
         this.city.position.y = -26.5;

@@ -2,11 +2,17 @@ import * as THREE from "three";
 import Main from "../Main";
 import speedLineVertexShader from "../../previousLessons/wavyBall/shaders/galaxy/vertex.glsl";
 import speedLineFragmentShader from "../../previousLessons/wavyBall/shaders/galaxy/fragment.glsl";
+import Resources from "../utils/Resources";
+import {GLTF} from "three/examples/jsm/loaders/GLTFLoader";
 
 export default class Driver {
+    main: Main = new Main();
+    resources: Resources = this.main.resources;
+    time = this.main.time;
+    driver: THREE.Object3D;
+    car = this.main.world.car;
+
     constructor() {
-        this.main = new Main();
-        this.resources = this.main.resources;
         this.time = this.main.time;
         this.driver = null;
         this.car = this.main.world.car;
@@ -20,7 +26,7 @@ export default class Driver {
     }
 
     setModel() {
-        this.driver = this.resources.items.carDriver.scene;
+        this.driver = (this.resources.items.carDriver as GLTF).scene;
 
         this.driver.traverse(child => {
             if (child instanceof THREE.Mesh) {
@@ -36,9 +42,11 @@ export default class Driver {
         this.car.group.add(this.driver);
     }
 
-    addEye(startX, startY, startZ) {
+    addEye(startX: number, startY: number, startZ: number) {
+        //@ts-ignore
         const sphereGeometry = new THREE.SphereBufferGeometry(0.015, 20, 20);
         const sphereMaterial = new THREE.ShaderMaterial({
+            //@ts-ignore
             size: 0.01,
             sizeAttenuation: true,
             vertexColors: true,
@@ -47,17 +55,14 @@ export default class Driver {
         const eye = new THREE.Mesh(sphereGeometry, sphereMaterial);
         eye.position.set(startX, startY, startZ);
 
-        // this.gui.add(eye.position, 'x').min(-1).max(1).step(0.01);
-        // this.gui.add(eye.position, 'y').min(-1).max(2).step(0.01);
-        // this.gui.add(eye.position, 'z').min(-1).max(2).step(0.01);
-
         this.car.group.add(eye);
-        // this.scene.add(eye);
     }
 
-    addWavyLine(startX, startY, startZ) {
+    addWavyLine(startX: number, startY: number, startZ: number) {
+        //@ts-ignore
         const waveLineGeometry = new THREE.CylinderBufferGeometry(0.003, 0.003, 0.25, 100, 1000);
         const waveLineMaterial = new THREE.ShaderMaterial({
+            //@ts-ignore
             size: 0.01,
             sizeAttenuation: true,
             vertexColors: true,
@@ -74,14 +79,6 @@ export default class Driver {
         waveLineMesh.rotation.y = -0.74;
         waveLineMesh.position.set(startX, startY, startZ);
 
-        // this.gui.add(waveLineMesh.position, 'x').min(-1).max(1).step(0.01);
-        // this.gui.add(waveLineMesh.position, 'z').min(-2).max(7).step(0.01);
-        // this.gui.add(waveLineMesh.position, 'y').min(-2).max(7).step(0.01);
-
-        // this.gui.add(waveLineMesh.rotation, 'y').min(-1).max(1).step(0.01);
-        // this.gui.add(waveLineMesh.rotation, 'z').min(-1).max(2).step(0.01);
-
         this.car.group.add(waveLineMesh);
-        // this.scene.add(waveLineMesh);
     }
 }

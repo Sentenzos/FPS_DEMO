@@ -1,17 +1,20 @@
 import {setEnvironmentIntensity} from "./World";
 import Main from "../Main";
+import {Object3D} from "three";
+import {GLTF} from "three/examples/jsm/loaders/GLTFLoader";
 
 export default class Ufo {
-    constructor() {
-        this.main = new Main();
-        this.scene = this.main.scene;
-        this.resources = this.main.resources;
+    main = new Main();
+    scene = this.main.scene;
+    resources = this.main.resources;
+    ufo: Object3D;
 
+    constructor() {
         this.setModel();
     }
 
     setModel() {
-        this.ufo = this.resources.items.ufo.scene;
+        this.ufo = (this.resources.items.ufo as GLTF).scene;
 
         setEnvironmentIntensity(this.ufo, 10);
 

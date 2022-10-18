@@ -78,21 +78,34 @@ module.exports = {
                 }
             },
 
-            // Shaders
-            {
-                test: /\.(glsl|vs|fs|vert|frag)$/,
-                type: 'asset/source',
-                generator:
-                {
-                    filename: 'assets/images/[hash][ext]'
-                }
-            },
+            // // Shaders
+            // {
+            //     test: /\.(glsl|vs|fs|vert|frag)$/,
+            //     type: 'asset/source',
+            //     generator:
+            //     {
+            //         filename: 'assets/images/[hash][ext]'
+            //     }
+            // },
 
             //TS
             {
                 test: /\.tsx?$/,
                 use: 'ts-loader',
                 exclude: /node_modules/,
+            },
+
+
+            //Shaders
+            {
+                module: {
+                    loaders: [
+                        {
+                            test: /\.(glsl|vs|fs)$/,
+                            loader: 'ts-shader-loader'
+                        }
+                    ]
+                }
             }
         ]
     },

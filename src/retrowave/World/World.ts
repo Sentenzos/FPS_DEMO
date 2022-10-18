@@ -1,6 +1,6 @@
 import Main from "../Main";
 import * as THREE from "three";
-import {Vector3} from "three";
+import {Object3D, Vector3} from "three";
 import {setDefaultForAllTextures} from "../js/textureHandlers";
 import grassVertexShader from '../shaders/grass/vertex.glsl';
 import grassFragmentShader from '../shaders/grass/fragment.glsl';
@@ -8,7 +8,7 @@ import {mergeBufferGeometries} from "three/examples/jsm/utils/BufferGeometryUtil
 import {mergeVertices} from "three/examples/jsm/utils/BufferGeometryUtils";
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import scene from "three/examples/jsm/offscreen/scene";
-import starsFragmentShader from '../shaders/stars/fragment.glsl';
+import * as starsFragmentShader from '../shaders/stars/fragment.glsl';
 import starsVertexShader from '../shaders/stars/vertex.glsl';
 import speedLineVertexShader from "../../previousLessons/wavyBall/shaders/galaxy/vertex.glsl";
 import speedLineFragmentShader from "../../previousLessons/wavyBall/shaders/galaxy/fragment.glsl";
@@ -30,32 +30,36 @@ import Sand from "./Sand";
 import Cacti from "./Cacti";
 import Projectors from "./Projectors";
 import ProjectAnimation from "./ProjectAnimation";
+import Time from "../utils/Time";
+import Renderer from "../Renderer";
+import Sizes from "../utils/Sizes";
+import Resources from "../utils/Resources";
 
 
 
 export default class World {
-    constructor() {
-        this.main = new Main();
-        this.scene = this.main.scene;
-        this.time = this.main.time;
-        this.renderer = this.main.renderer;
-        this.sizes = this.main.sizes;
-        this.gui = this.main.gui;
-        this.resources = this.main.resources;
+    main = new Main();
+    scene = this.main.scene;
+    time = this.main.time;
+    renderer = this.main.renderer;
+    sizes = this.main.sizes;
+    // gui = this.main.gui;
+    resources: Resources = this.main.resources;
+    car = new Car();
+    driver = new Driver();
+    fence = new Fence();
+    city = new City();
+    rocks = new Rocks();
+    moon = new Moon();
+    stars = new Stars();
+    fog = new Fog();
+    ufo = new Ufo();
+    road = new Road();
 
+    constructor() {
         this.createMoveGroup();
 
         this.resources.on('ready', () => {
-            this.car = new Car();
-            this.driver = new Driver();
-            this.fence = new Fence();
-            this.city = new City();
-            this.rocks = new Rocks();
-            this.moon = new Moon();
-            this.stars = new Stars();
-            this.fog = new Fog();
-            this.ufo = new Ufo();
-            this.road = new Road();
             this.rocket = new Rocket();
             this.lanterns = new Lanterns();
             this.sand = new Sand();
@@ -71,7 +75,6 @@ export default class World {
 
         // this.resources.on('ready', () => {
         //     // this.animateGround();
-        //
         //     // this.createWireframes();
         //     // this.createGrass();
         //     // this.createDunes();
@@ -142,7 +145,7 @@ export default class World {
         // })
     }
 
-    addLastMesh({meshNumber, placeToAdd, mesh, geometry, material, direction, space, callback}) {
+    addLastMesh({meshNumber, placeToAdd, mesh, geometry, material, direction, space, callback}: {meshNumber: number, placeToAdd: Object3D, mesh: THREE.Mesh, geometry: THREE.BufferGeometry, material: THREE.Material, direction, space, callback}) {
         for (let i = 0; i < meshNumber; i++) {
             //TODO заменить на цикл for
             const lastMesh = placeToAdd.children.length ? placeToAdd.children.reduce((prev, current) => {

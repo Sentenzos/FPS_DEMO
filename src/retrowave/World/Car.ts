@@ -6,20 +6,19 @@ import {SourcesArrType} from "../sources";
 import {GLTF} from "three/examples/jsm/loaders/GLTFLoader";
 
 export default class Car {
-    main: Main = new Main();
-    scene: Scene = this.main.scene;
-    resources: Resources = this.main.resources;
+    main = new Main();
+    scene = this.main.scene;
+    resources = this.main.resources;
     carWheels: THREE.Mesh[];
     group: THREE.Group;
-    car: GLTF
+    car: THREE.Object3D
 
     constructor() {
         this.setModel();
     }
 
     setModel() {
-        this.car = this.resources.items.carModel as THREE.Mesh;
-            // .scene.children[0].children[0];
+        this.car = (this.resources.items.carModel as GLTF).scene.children[0].children[0];
 
         this.car.traverse(child => {
             if (child instanceof THREE.Mesh) {

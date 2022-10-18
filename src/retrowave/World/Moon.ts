@@ -1,15 +1,19 @@
 import * as THREE from "three";
 import Main from "../Main";
+import {GLTF} from "three/examples/jsm/loaders/GLTFLoader";
+import {PointLight} from "three";
 
 export default class Moon {
+    main = new Main();
+    scene = this.main.scene;
+    resources = this.main.resources;
+
+    group = new THREE.Group();
+    moon: THREE.Object3D;
+
+    pointLight: PointLight;
+
     constructor() {
-        this.main = new Main();
-        this.scene = this.main.scene;
-        this.resources = this.main.resources;
-
-        this.group = new THREE.Group();
-        this.moon = null;
-
         this.setModel();
     }
 
@@ -17,7 +21,7 @@ export default class Moon {
         this.group.position.z = -300;
         this.group.position.y = 50;
 
-        this.moon = this.resources.items.moon.scene;
+        this.moon = (this.resources.items.moon as GLTF).scene;
 
         this.moon.traverse(child => {
             if (child instanceof THREE.Mesh) {
