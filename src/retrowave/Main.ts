@@ -21,7 +21,7 @@ export default class Main {
     resources: Resources;
     lights: Lights;
     renderer: Renderer;
-    world: any;
+    world: World;
 
 
     constructor (canvas?: HTMLCanvasElement) {

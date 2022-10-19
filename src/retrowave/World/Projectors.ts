@@ -1,21 +1,22 @@
 import Main from "../Main";
 import * as THREE from "three";
 import {setEnvironmentIntensity} from "./World";
+import {GLTF} from "three/examples/jsm/loaders/GLTFLoader";
 
 export default class Projectors {
+    main = new Main();
+    scene = this.main.scene;
+    resources = this.main.resources;
+
+    projector1: THREE.Object3D;
+    projector2: THREE.Object3D;
+
     constructor() {
-        this.main = new Main();
-        this.scene = this.main.scene;
-        this.resources = this.main.resources;
-
-        this.projector1 = null;
-        this.projector2 = null;
-
         this.setModel();
     }
 
     setModel() {
-        const mesh = this.resources.items.projector.scene;
+        const mesh = (this.resources.items.projector as GLTF).scene;
 
         setEnvironmentIntensity(mesh, 2);
 

@@ -1,35 +1,39 @@
 import Main from "../Main";
 import * as THREE from "three";
 import {setDefaultForAllTextures} from "../js/textureHandlers";
+import World from "./World";
+import {Texture} from "three";
 
 export default class Sand {
+    main = new Main();
+    scene = this.main.scene;
+    resources = this.main.resources;
+    addLastMesh: typeof World.prototype.addLastMesh = this.main.world.addLastMesh;
+    moveGroup: typeof World.prototype.moveGroup = this.main.world.moveGroup;
+
+    group = new THREE.Group();
+    SAND_LENGTH = 100;
+    textures: {[key: string]: Texture};
+    //@ts-ignore
+    sandGeometry: THREE.PlaneBufferGeometry;
+    sandMaterial: THREE.MeshStandardMaterial;
+
     constructor() {
-        this.main = new Main();
-        this.scene = this.main.scene;
-        this.resources = this.main.resources;
-        this.addLastMesh = this.main.world.addLastMesh;
-        this.moveGroup = this.main.world.moveGroup;
-
-        this.group = new THREE.Group();
-        this.SAND_LENGTH = 100;
-        this.textures = null;
-        this.sandGeometry = null;
-        this.sandMaterial = null;
-
         this.setGeometry();
         this.setMaterial();
         this.setMesh();
     }
 
     setGeometry() {
+        //@ts-ignore
         this.sandGeometry = new THREE.PlaneBufferGeometry(this.SAND_LENGTH, 1000);
     }
 
     setMaterial() {
         this.textures = {
-            map: this.resources.items.sandColor,
-            normalMap: this.resources.items.sandNormal,
-            roughnessMap: this.resources.items.sandMetallic,
+            map: this.resources.items.sandColor as Texture,
+            normalMap: this.resources.items.sandNormal as Texture,
+            roughnessMap: this.resources.items.sandMetallic as Texture,
             // displacementMap: this.resources.items.roadHeight,
         }
 

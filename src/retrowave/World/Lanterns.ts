@@ -1,20 +1,22 @@
 import * as THREE from "three";
 import Main from "../Main";
+import World from "./World";
+import {GLTF} from "three/examples/jsm/loaders/GLTFLoader";
 
 export default class Lanterns {
+    main = new Main();
+    scene = this.main.scene;
+    resources = this.main.resources;
+    addLastMesh: typeof World.prototype.addLastMesh = this.main.world.addLastMesh;
+    moveGroup: typeof World.prototype.moveGroup = this.main.world.moveGroup;
+
+    lanternLight: THREE.PointLight;
+    mesh: THREE.Object3D;
+    group = new THREE.Group();
+    SPACE = 50;
+    object3D = new THREE.Group();
+
     constructor() {
-        this.main = new Main();
-        this.scene = this.main.scene;
-        this.resources = this.main.resources;
-        this.addLastMesh = this.main.world.addLastMesh;
-        this.moveGroup = this.main.world.moveGroup;
-
-        this.lanternLight = null;
-        this.mesh = null;
-        this.group = new THREE.Group();
-        this.SPACE = 50;
-        this.object3D = new THREE.Group();
-
         this.setLight();
         this.setModel();
     }
@@ -33,7 +35,7 @@ export default class Lanterns {
     }
 
     setModel() {
-        this.mesh = this.resources.items.streetLamp.scene;
+        this.mesh = (this.resources.items.streetLamp as GLTF).scene;
 
         this.mesh.traverse(child => {
             if (child instanceof THREE.Mesh) {

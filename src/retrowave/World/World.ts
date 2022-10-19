@@ -1,17 +1,6 @@
 import Main from "../Main";
 import * as THREE from "three";
-import {Object3D, Vector3} from "three";
-import {setDefaultForAllTextures} from "../js/textureHandlers";
-import grassVertexShader from '../shaders/grass/vertex.glsl';
-import grassFragmentShader from '../shaders/grass/fragment.glsl';
-import {mergeBufferGeometries} from "three/examples/jsm/utils/BufferGeometryUtils.js";
-import {mergeVertices} from "three/examples/jsm/utils/BufferGeometryUtils";
-import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
-import scene from "three/examples/jsm/offscreen/scene";
-import * as starsFragmentShader from '../shaders/stars/fragment.glsl';
-import starsVertexShader from '../shaders/stars/vertex.glsl';
-import speedLineVertexShader from "../../previousLessons/wavyBall/shaders/galaxy/vertex.glsl";
-import speedLineFragmentShader from "../../previousLessons/wavyBall/shaders/galaxy/fragment.glsl";
+import {CubeTexture, Object3D, Vector3} from "three";
 import sandVertexShader from "../../previousLessons/sandShader/shaders/galaxy/vertex.glsl";
 import sandFragmentShader from "../../previousLessons/sandShader/shaders/galaxy/fragment.glsl";
 import Car from "./Car";
@@ -34,6 +23,7 @@ import Time from "../utils/Time";
 import Renderer from "../Renderer";
 import Sizes from "../utils/Sizes";
 import Resources from "../utils/Resources";
+import {randFloat} from "three/src/math/MathUtils";
 
 
 
@@ -55,31 +45,22 @@ export default class World {
     fog = new Fog();
     ufo = new Ufo();
     road = new Road();
+    rocket = new Rocket();
+    lanterns = new Lanterns();
+    sand = new Sand();
+    cacti = new Cacti();
+    projectors = new Projectors();
+    animation: ProjectAnimation;
+    moveGroup: THREE.Group;
 
     constructor() {
         this.createMoveGroup();
 
         this.resources.on('ready', () => {
-            this.rocket = new Rocket();
-            this.lanterns = new Lanterns();
-            this.sand = new Sand();
-            this.cacti = new Cacti();
-            this.projectors = new Projectors();
-
             this.animation = new ProjectAnimation();
-
             this.createEnvironment();
             this.animateGround();
         })
-
-
-        // this.resources.on('ready', () => {
-        //     // this.animateGround();
-        //     // this.createWireframes();
-        //     // this.createGrass();
-        //     // this.createDunes();
-        //     // this.createSandShader();
-        // })
     }
 
     createMoveGroup() {
@@ -90,62 +71,21 @@ export default class World {
     }
 
     createEnvironment() {
-        const environmentMap = this.resources.items.environmentMapTexture;
+        const environmentMap = this.resources.items.environmentMapTexture as CubeTexture;
         environmentMap.encoding = THREE.sRGBEncoding;
         // this.scene.background = environmentMap;
         this.scene.environment = environmentMap;
     }
 
-    createGrass() {
-        const planeGeometry = new THREE.PlaneBufferGeometry(10, 10, 100, 100);
-        const planeMaterial = new THREE.ShaderMaterial({
-            color: 0xffff00,
-            side: THREE.DoubleSide,
-            vertexShader: grassVertexShader,
-            fragmentShader: grassFragmentShader,
-            uniforms: {
-                globalTime: {value: 0.0},
-                magnitude: {value: 0.6},
-                uvScale: {value: new THREE.Vector2(16.0, 1.0)},
-                lightPos: {value: new THREE.Vector3(0, 0, 0)}
-            }
-        })
-
-        this.time.on('tick', () => {
-            planeMaterial.uniforms.globalTime.value += this.time.delta * 0.0012;
-        })
-
-        const mesh = new THREE.Mesh(planeGeometry, planeMaterial);
-
-        mesh.rotation.x = Math.PI * -0.5;
-        // mesh.position.y = 1;
-
-        this.moveGroup.add(mesh);
-
-        // uniforms = setUniforms(grassTexture);
-        // grassMaterial = getGrassShaderMaterial(uniforms);
-        const planesGeometry = createPlanesGeometry(350);
-        planesGeometry.applyMatrix4(new THREE.Matrix4().setPosition(new THREE.Vector3(0, 0, -200)));
-        const planes = new THREE.Mesh(planesGeometry, planeMaterial);
-        planes.position.set(0, 200, 0);
-        planes.matrixAutoUpdate = false;
-
-        this.moveGroup.add(planes);
-    }
-
-    createDunes() {
-        // gltfLoader.load('/resources/mountains/scene.gltf', (gltf) => {
-        //     const dunes = gltf.scene;
-        //     dunes.scale.set(5, 5, 5);
-        //     dunes.position.z = -300;
-        //     // dunes.position.x = 0;
-        //
-        //
-        //     this.scene.add(dunes);
-        // })
-    }
-
-    addLastMesh({meshNumber, placeToAdd, mesh, geometry, material, direction, space, callback}: {meshNumber: number, placeToAdd: Object3D, mesh: THREE.Mesh, geometry: THREE.BufferGeometry, material: THREE.Material, direction, space, callback}) {
+    addLastMesh({meshNumber, placeToAdd, mesh, geometry, material, direction, space, callback}:
+                    {meshNumber: number,
+                        placeToAdd: Object3D,
+                        mesh?: THREE.Object3D,
+                        geometry?: THREE.BufferGeometry,
+                        material?: THREE.Material,
+                        direction: 'neg' | 'pos',
+                        space: number,
+                        callback?: (mesh: THREE.Object3D) => void}) {
         for (let i = 0; i < meshNumber; i++) {
             //TODO заменить на цикл for
             const lastMesh = placeToAdd.children.length ? placeToAdd.children.reduce((prev, current) => {
@@ -169,7 +109,7 @@ export default class World {
         }
     }
 
-    removeLastMesh(group) {
+    removeLastMesh(group: THREE.Group) {
         const lastObject3D = group.children.reduce((prev, current) => {
             if (prev) {
                 if (prev.position.x >= current.position.x) return prev;
@@ -191,9 +131,9 @@ export default class World {
         for (let i = 0; i < 200000; i++) {
             const i3 = i * 3;
 
-            positions[i3 + 0] = THREE.Math.randFloat(-100, 100);
-            positions[i3 + 1] = Math.pow(THREE.Math.randFloat(0.15, 1), 2);
-            positions[i3 + 2] = THREE.Math.randFloat(-50, -20);
+            positions[i3 + 0] = randFloat(-100, 100);
+            positions[i3 + 1] = Math.pow(randFloat(0.15, 1), 2);
+            positions[i3 + 2] = randFloat(-50, -20);
         }
 
         geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -211,6 +151,7 @@ export default class World {
             fragmentShader: sandFragmentShader
         })
 
+        //@ts-ignore
         material.encoding = THREE.sRGBEncoding;
 
         const points = new THREE.Points(geometry, material);
@@ -343,70 +284,19 @@ export default class World {
 }
 
 
-function createPlanesGeometry(n_planes) {
-    let containerGeometry = new THREE.BufferGeometry();
-    const planeGeometry = new THREE.PlaneGeometry(400, 30, 14, 1);
-    console.log(planeGeometry)
 
-    const position = planeGeometry.attributes.position;
-
-    for (let i = 0; i < position.count; i++) {
-        //i*3 - это X, i*3 + 2 - это Z
-        position.array[i * 3 + 2] = Math.sin(position.array[i * 3]) * 20
-        // planeGeometry.vertices[i].z = Math.sin(planeGeometry.vertices[i].x)*20;
-    }
-    // planeGeometry.applyMatrix4( new THREE.Matrix4().setPosition( new THREE.Vector3( 0, 15, 0 ) ) );
-    let x = 0;
-    let z = 0;
-    let rot = (Math.PI * 2) / 3;
-
-    // const mesh = new THREE.Mesh(planeGeometry);
-    // console.log(mesh)
-    let arr = []
-
-    for (let i = 0; i < 1; i++) {
-        const geometry = planeGeometry.clone();
-
-        geometry.rotateY((i % 3 * rot) + Math.random() - 0.5);
-        geometry.translate((x * 50 - 250) + (Math.random() * 20 - 10), 0, (z * 80 - 180) + (Math.random() * 20 - 10));
-        geometry.scale(1.0, 1.1 - Math.random() * 0.4, 1.0);
-
-        if (i % 3 === 2) {
-            ++x;
-        }
-        if (x === 11) {
-            x = 0;
-            ++z;
-        }
-
-        // mesh.updateMatrix();
-
-        console.log(geometry)
-        arr.push(geometry);
-
-        containerGeometry = mergeBufferGeometries(arr);
-        // containerGeometry = mergeVertices(mesh.geometry);
-    }
-    console.log(containerGeometry)
-    // I've used a BufferGeometry only here, and not previously, because buffered geometries
-    // do not work with the merge method
-    return containerGeometry;
-    // const bufferedGeometry = new THREE.BufferGeometry().fromGeometry(containerGeometry);
-    // return bufferedGeometry;
-}
-
-export function getRandomArbitrary(min, max) {
+export function getRandomArbitrary(min: number, max: number) {
     return Math.random() * (max - min) + min;
 }
 
-function getSize(mesh) {
+function getSize(mesh: THREE.Object3D) {
     let cubeBoundingBox = new THREE.Box3().setFromObject(mesh);
     let boxSize = new THREE.Vector3();
     cubeBoundingBox.getSize(boxSize);
     return boxSize
 }
 
-export function setEnvironmentIntensity(model, intensity) {
+export function setEnvironmentIntensity(model: Object3D, intensity: number) {
     model.traverse(child => {
         if (child instanceof THREE.Mesh && child.material instanceof THREE.MeshStandardMaterial) {
             child.material.envMapIntensity = intensity;
@@ -414,28 +304,30 @@ export function setEnvironmentIntensity(model, intensity) {
     })
 }
 
-function removeMesh(meshUuid, scene) {
+function removeMesh(meshUuid: string, scene: Object3D) {
     scene.traverse(child => {
         let objToDelete = child.children.find(c => c.uuid === meshUuid);
         if (objToDelete) {
             child.remove(objToDelete);
             if (child instanceof THREE.Mesh) {
-                objToDelete.geometry.dispose();
-                objToDelete.material.dispose();
+                (objToDelete as THREE.Mesh).geometry.dispose();
+                //@ts-ignore
+                (objToDelete as THREE.Mesh).material.dispose();
             }
             objToDelete = undefined;
         }
     })
 }
 
-function removeMeshesByCallback(group, callback) {
+function removeMeshesByCallback(group: THREE.Object3D, callback: (argument: THREE.Object3D) => void) {
     group.traverse(child => {
         let objsToDelete = child.children.filter(c => callback(c));
         objsToDelete.forEach(obj => {
             child.remove(obj);
             if (child instanceof THREE.Mesh) {
-                obj.geometry.dispose();
-                obj.material.dispose();
+                (obj as THREE.Mesh).geometry.dispose();
+                //@ts-ignore
+                (obj as THREE.Mesh).material.dispose();
             }
             obj = undefined;
         })

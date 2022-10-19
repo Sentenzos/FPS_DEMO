@@ -1,21 +1,22 @@
 import Main from "../Main";
 import * as THREE from "three";
 import {setEnvironmentIntensity} from "./World";
+import {GLTF} from "three/examples/jsm/loaders/GLTFLoader";
 
 export default class Rocket {
+    main = new Main();
+    scene = this.main.scene;
+    resources = this.main.resources;
+
+    group = new THREE.Group();
+    rocket: THREE.Object3D;
+
     constructor() {
-        this.main = new Main();
-        this.scene = this.main.scene;
-        this.resources = this.main.resources;
-
-        this.group = new THREE.Group();
-        this.rocket = null;
-
         this.setModel();
     }
 
     setModel() {
-        this.rocket = this.resources.items.rocket.scene;
+        this.rocket = (this.resources.items.rocket as GLTF).scene;
         setEnvironmentIntensity(this.rocket, 1.5);
 
         this.group.position.x = 250;

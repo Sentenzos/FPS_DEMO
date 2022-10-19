@@ -1,14 +1,14 @@
 import Main from "../Main";
+import World from "./World";
 
 export default class ProjectAnimation {
-    constructor() {
-        this.main = new Main();
-        this.scene = this.main.scene;
-        this.resources = this.main.resources;
-        this.moveGroup = this.main.world.moveGroup;
-        this.time = this.main.time;
-        this.world = this.main.world;
+    main = new Main();
+    scene = this.main.scene;
+    resources = this.main.resources;
+    time = this.main.time;
+    world = this.main.world;
 
+    constructor() {
         this.time.on('tick', () => {
             this.animateProjectors();
             this.animateUfo();

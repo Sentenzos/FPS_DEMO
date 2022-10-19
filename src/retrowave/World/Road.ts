@@ -2,6 +2,7 @@ import * as THREE from "three";
 import Main from "../Main";
 import {setDefaultForAllTextures} from "../js/textureHandlers";
 import {Texture} from "three";
+import World from "./World";
 
 type textures = {
 
@@ -11,9 +12,12 @@ export default class Road {
     main = new Main();
     scene = this.main.scene;
     resources = this.main.resources;
-    addLastMesh = this.main.world.addLastMesh;
+    addLastMesh: typeof World.prototype.addLastMesh = this.main.world.addLastMesh;
     moveGroup = this.main.world.moveGroup;
-    textures: {[key: string]: Texture}
+    textures: {[key: string]: Texture};
+    //@ts-ignore
+    roadGeometry: THREE.PlaneBufferGeometry;
+    roadMaterial: THREE.MeshStandardMaterial;
 
     group = new THREE.Group();
     ROAD_LENGTH = 40;
@@ -28,7 +32,6 @@ export default class Road {
     setGeometry() {
         //@ts-ignore;
         this.roadGeometry = new THREE.PlaneBufferGeometry(this.ROAD_LENGTH, 40, 1000, 1000);
-        //@ts-ignore;
         this.roadGeometry.setAttribute('uv2', new THREE.Float32BufferAttribute(this.roadGeometry.attributes.uv, 2));
     }
 
@@ -63,9 +66,7 @@ export default class Road {
 
     setMesh() {
         this.addLastMesh({
-            //@ts-ignore;
             geometry: this.roadGeometry,
-            //@ts-ignore;
             material: this.roadMaterial,
             placeToAdd: this.group,
             meshNumber: 3,
