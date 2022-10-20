@@ -10,7 +10,7 @@ export default class Rocks {
     resources = this.main.resources;
     moveGroup = this.main.world.moveGroup;
 
-    rocks: THREE.Mesh[];
+    rocks: THREE.Mesh[] = [];
     group = new THREE.Group();
 
     constructor() {

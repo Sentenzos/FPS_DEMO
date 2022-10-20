@@ -35,21 +35,22 @@ export default class World {
     sizes = this.main.sizes;
     // gui = this.main.gui;
     resources: Resources = this.main.resources;
-    car = new Car();
-    driver = new Driver();
-    fence = new Fence();
-    city = new City();
-    rocks = new Rocks();
-    moon = new Moon();
-    stars = new Stars();
-    fog = new Fog();
-    ufo = new Ufo();
-    road = new Road();
-    rocket = new Rocket();
-    lanterns = new Lanterns();
-    sand = new Sand();
-    cacti = new Cacti();
-    projectors = new Projectors();
+
+    car: Car;
+    driver: Driver;
+    fence: Fence;
+    city: City;
+    rocks: Rocks;
+    moon: Moon;
+    stars: Stars;
+    fog: Fog;
+    ufo: Ufo;
+    road: Road;
+    rocket: Rocket;
+    lanterns: Lanterns;
+    sand: Sand;
+    cacti: Cacti;
+    projectors: Projectors;
     animation: ProjectAnimation;
     moveGroup: THREE.Group;
 
@@ -57,6 +58,22 @@ export default class World {
         this.createMoveGroup();
 
         this.resources.on('ready', () => {
+            this.car = new Car();
+            this.driver = new Driver();
+            this.fence = new Fence();
+            this.city = new City();
+            this.rocks = new Rocks();
+            this.moon = new Moon();
+            this.stars = new Stars();
+            this.fog = new Fog();
+            this.ufo = new Ufo();
+            this.road = new Road();
+            this.rocket = new Rocket();
+            this.lanterns = new Lanterns();
+            this.sand = new Sand();
+            this.cacti = new Cacti();
+            this.projectors = new Projectors();
+
             this.animation = new ProjectAnimation();
             this.createEnvironment();
             this.animateGround();

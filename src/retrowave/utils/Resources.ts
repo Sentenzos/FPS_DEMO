@@ -6,26 +6,18 @@ import {CubeTexture, Texture} from "three";
 
 
 export default class Resources extends EventEmitter {
-    items: { [key: string]: GLTF | Texture | CubeTexture };
+    items: { [key: string]: GLTF | Texture | CubeTexture } = {};
     toLoad: number = this.sources.length;
     loaded: number = 0;
-    loaders: {
-        gltfLoader: GLTFLoader,
-        textureLoader: THREE.TextureLoader,
-        cubeTextureLoader: THREE.CubeTextureLoader
+    loaders = {
+        gltfLoader: new GLTFLoader(),
+        textureLoader: new THREE.TextureLoader(),
+        cubeTextureLoader: new THREE.CubeTextureLoader()
     }
-
 
     constructor(public sources: SourcesArrType) {
         super();
-        this.setLoader();
         this.startLoading();
-    }
-
-    setLoader(): void {
-        this.loaders.gltfLoader = new GLTFLoader();
-        this.loaders.textureLoader = new THREE.TextureLoader();
-        this.loaders.cubeTextureLoader = new THREE.CubeTextureLoader();
     }
 
     startLoading(): void {
@@ -58,6 +50,7 @@ export default class Resources extends EventEmitter {
     }
 
     sourceLoaded(source: SourcesObjType, file: GLTF | Texture | CubeTexture): void {
+        console.log('load', source.name)
         this.items[source.name] = file as GLTF | Texture | CubeTexture;
         this.loaded++;
         if (this.loaded === this.toLoad) {

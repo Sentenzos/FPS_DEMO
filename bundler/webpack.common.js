@@ -95,18 +95,22 @@ module.exports = {
                 exclude: /node_modules/,
             },
 
-
-            //Shaders
             {
-                module: {
-                    loaders: [
-                        {
-                            test: /\.(glsl|vs|fs)$/,
-                            loader: 'ts-shader-loader'
-                        }
-                    ]
-                }
+                test: /\.(glsl|vs|fs)$/,
+                loader: 'ts-shader-loader'
             }
+
+            // //Shaders
+            // {
+            //     module: {
+            //         loaders: [
+            //             {
+            //                 test: /\.(glsl|vs|fs)$/,
+            //                 loader: 'ts-shader-loader'
+            //             }
+            //         ]
+            //     }
+            // }
         ]
     },
     resolve: {

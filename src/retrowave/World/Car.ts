@@ -9,8 +9,8 @@ export default class Car {
     main = new Main();
     scene = this.main.scene;
     resources = this.main.resources;
-    carWheels: THREE.Mesh[];
-    group: THREE.Group;
+    carWheels: THREE.Mesh[] = [];
+    group = new THREE.Group();
     car: THREE.Object3D
 
     constructor() {
