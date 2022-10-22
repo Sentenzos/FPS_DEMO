@@ -43,42 +43,12 @@ export default class Driver {
     }
 
     addEye(startX: number, startY: number, startZ: number) {
-        //@ts-ignore
-        const sphereGeometry = new THREE.SphereBufferGeometry(0.015, 20, 20);
-        const sphereMaterial = new THREE.ShaderMaterial({
-            //@ts-ignore
-            size: 0.01,
-            sizeAttenuation: true,
-            vertexColors: true,
-        });
+        const sphereGeometry = new THREE.SphereGeometry(0.015, 20, 20);
+        const sphereMaterial = new THREE.MeshBasicMaterial({color: 'red'});
 
         const eye = new THREE.Mesh(sphereGeometry, sphereMaterial);
         eye.position.set(startX, startY, startZ);
 
         this.car.group.add(eye);
-    }
-
-    addWavyLine(startX: number, startY: number, startZ: number) {
-        //@ts-ignore
-        const waveLineGeometry = new THREE.CylinderBufferGeometry(0.003, 0.003, 0.25, 100, 1000);
-        const waveLineMaterial = new THREE.ShaderMaterial({
-            //@ts-ignore
-            size: 0.01,
-            sizeAttenuation: true,
-            vertexColors: true,
-            uniforms:
-                {
-                    uTime: this.time.uTime
-                },
-            vertexShader: speedLineVertexShader,
-            fragmentShader: speedLineFragmentShader
-        });
-        const waveLineMesh = new THREE.Mesh(waveLineGeometry, waveLineMaterial);
-
-        waveLineMesh.rotation.z = 1.7;
-        waveLineMesh.rotation.y = -0.74;
-        waveLineMesh.position.set(startX, startY, startZ);
-
-        this.car.group.add(waveLineMesh);
     }
 }

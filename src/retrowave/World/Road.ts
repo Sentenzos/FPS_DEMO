@@ -15,8 +15,7 @@ export default class Road {
     addLastMesh: typeof World.prototype.addLastMesh = this.main.world.addLastMesh;
     moveGroup = this.main.world.moveGroup;
     textures: {[key: string]: Texture};
-    //@ts-ignore
-    roadGeometry: THREE.PlaneBufferGeometry;
+    roadGeometry: THREE.PlaneGeometry;
     roadMaterial: THREE.MeshStandardMaterial;
 
     group = new THREE.Group();
@@ -30,9 +29,7 @@ export default class Road {
     }
 
     setGeometry() {
-        //@ts-ignore;
-        this.roadGeometry = new THREE.PlaneBufferGeometry(this.ROAD_LENGTH, 40, 1000, 1000);
-        this.roadGeometry.setAttribute('uv2', new THREE.Float32BufferAttribute(this.roadGeometry.attributes.uv, 2));
+        this.roadGeometry = new THREE.PlaneGeometry(this.ROAD_LENGTH, 40, 1000, 1000);
     }
 
     setMaterial() {
@@ -40,27 +37,20 @@ export default class Road {
             map: this.resources.items.roadColor as Texture,
             aoMap: this.resources.items.roadAO as Texture,
             normalMap: this.resources.items.roadNormal as Texture,
-            metallicness: this.resources.items.roadMetallic as Texture,
             roughnessMap: this.resources.items.roadRoughness as Texture,
-            // displacementMap: this.resources.items.roadHeight,
         }
 
         setDefaultForAllTextures({
             textures: [
-                this.textures.map, this.textures.aoMap, this.textures.normalMap,
-                this.textures.metallicness, this.textures.roughnessMap
+                this.textures.map, this.textures.aoMap, this.textures.normalMap, this.textures.roughnessMap
             ], repeat: {x: 8, y: 8}, anisotropy: 8
         })
 
-        //@ts-ignore;
         this.roadMaterial = new THREE.MeshStandardMaterial({
-            // color: 0x023788,
             ...this.textures,
             aoMapIntensity: 3,
             transparent: true,
             normalScale: new THREE.Vector2(0.2, 0.2),
-            // displacementMap: roadHeightTexture,
-            // displacementScale: 0.1,
         });
     }
 

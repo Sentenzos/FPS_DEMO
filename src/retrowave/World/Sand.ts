@@ -14,8 +14,7 @@ export default class Sand {
     group = new THREE.Group();
     SAND_LENGTH = 100;
     textures: {[key: string]: Texture};
-    //@ts-ignore
-    sandGeometry: THREE.PlaneBufferGeometry;
+    sandGeometry: THREE.PlaneGeometry;
     sandMaterial: THREE.MeshStandardMaterial;
 
     constructor() {
@@ -25,8 +24,7 @@ export default class Sand {
     }
 
     setGeometry() {
-        //@ts-ignore
-        this.sandGeometry = new THREE.PlaneBufferGeometry(this.SAND_LENGTH, 1000);
+        this.sandGeometry = new THREE.PlaneGeometry(this.SAND_LENGTH, 1000);
     }
 
     setMaterial() {

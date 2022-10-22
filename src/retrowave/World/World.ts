@@ -168,9 +168,6 @@ export default class World {
             fragmentShader: sandFragmentShader
         })
 
-        //@ts-ignore
-        material.encoding = THREE.sRGBEncoding;
-
         const points = new THREE.Points(geometry, material);
 
         this.scene.add(points)
@@ -178,19 +175,6 @@ export default class World {
 
     animateGround() {
         this.time.on('tick', () => {
-            // if (this.lastMovedTime === undefined) {
-            //     this.lastMovedTime = this.time.elapsed;
-            //     return;
-            // } else {
-            //     if (this.time.elapsed - this.lastMovedTime >= 20) {
-            //         console.log('passed')
-            //         this.lastMovedTime = this.time.elapsed;
-            //     } else {
-            //         console.log(this.time.elapsed - this.lastMovedTime)
-            //         return;
-            //     }
-            // }
-
             this.moveGroup.position.x += 0.5;
 
             const groupPosition = this.moveGroup.position.x;

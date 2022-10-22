@@ -11,6 +11,7 @@ import {RGBShiftShader} from "three/examples/jsm/shaders/RGBShiftShader";
 import {DotScreenPass} from "three/examples/jsm/postprocessing/DotScreenPass";
 import Sizes from "./utils/Sizes";
 import Camera from "./Camera";
+import {Vector2} from "three/src/Three";
 
 export default class Renderer {
     main: Main = new Main();
@@ -90,14 +91,7 @@ export default class Renderer {
         // const gammaCorrectionPass = new ShaderPass(GammaCorrectionShader);
         // this.effectComposer.addPass(gammaCorrectionPass);
 
-        // @ts-ignore
-        const unrealBloomPass = new UnrealBloomPass();
-        unrealBloomPass.strength = 5;
-        unrealBloomPass.radius = 0.64;
-        unrealBloomPass.threshold = 0.1;
-        unrealBloomPass.enabled = true;
-        // @ts-ignore
-        unrealBloomPass.exposure = 1.8;
+        const unrealBloomPass = new UnrealBloomPass(new THREE.Vector2(), 5, 0.64, 0.1);
         this.effectComposer.addPass(unrealBloomPass);
     }
 
