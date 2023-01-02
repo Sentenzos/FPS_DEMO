@@ -5,10 +5,12 @@ import {Player} from "./Player";
 import {PlayerControl} from "../Conrols/PlayerControl";
 import {PointerLockControls} from "../Conrols/PointerLockControls";
 import {WASDControls} from "../Conrols/WASDControls";
+import {Bullets} from "./Bullets";
 
 export class World extends Utils {
     plane: Plane;
     player: Player;
+    bullets: Bullets;
 
     constructor(scene: THREE.Scene, canvas: HTMLCanvasElement) {
         super(scene, canvas);
@@ -17,13 +19,16 @@ export class World extends Utils {
         //     canvas.requestPointerLock();
         // })
 
-        this.plane = new Plane(this.scene);
-        this.player = new Player(this.scene, 'player');
+        this.resources.on('ready', () => {
+            this.plane = new Plane(this.scene);
+            this.player = new Player(this.resources.items, this.scene, 'player');
+            this.bullets = new Bullets(this.scene);
 
-        new PlayerControl(this.scene, this.camera, canvas);
 
-        // const controls = new PointerLockControls(this.camera.camera, canvas);
-        // new WASDControls(controls, this.scene, this.camera.camera, this.renderer.renderer);
+            new PlayerControl(this.scene, this.camera, canvas);
+
+
+        })
 
         this.sizes.on('resize', () => {
             this.resize();
@@ -33,8 +38,6 @@ export class World extends Utils {
             this.update();
         })
     }
-
-
 
     resize(): void {
         // this.camera.resize();

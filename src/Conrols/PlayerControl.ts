@@ -66,7 +66,7 @@ export class PlayerControl {
 
             window.addEventListener('mousemove', handleMove);
         }
-        console.log()
+
 
         window.addEventListener('keydown', moveWASD);
         window.addEventListener('keyup', stopWASD);

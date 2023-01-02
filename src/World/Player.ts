@@ -1,30 +1,31 @@
 import * as THREE from 'three';
 import {getSize} from "../Utils/js/getSize";
+import {Group, Object3D} from "three";
+import Resources from "../Utils/Resources";
+import {GLTF} from "three/examples/jsm/loaders/GLTFLoader";
 
 export class Player {
-    mesh: THREE.Mesh;
+    object: Object3D;
     geometry: THREE.PlaneGeometry;
-    material: THREE.MeshBasicMaterial
+    material: THREE.MeshBasicMaterial;
+    player: Object3D;
+    items: typeof Resources.prototype.items;
 
-    constructor(public scene: THREE.Scene, objectName: string) {
+    constructor(items: typeof Resources.prototype.items, public scene: THREE.Scene, objectName: string) {
+        this.items = items;
+
         this.setModel(scene);
         this.setObjectName(objectName);
     }
 
     setModel(scene:  THREE.Scene) {
-        this.geometry = new THREE.BoxGeometry(1.8, 0.5, 0.2);
-        this.material = new THREE.MeshBasicMaterial({color: 'blue'});
-        this.mesh = new THREE.Mesh(this.geometry, this.material);
-        this.mesh.rotation.z += Math.PI * 0.5;
+        this.object = (this.items.playerModel as GLTF).scene;
+        this.object.scale.set(5,5,5)
 
-        const size = getSize(this.mesh);
-
-        this.mesh.position.y += size.y / 2 + 0.02;
-
-        scene.add(this.mesh);
+        scene.add(this.object);
     }
 
     setObjectName(name: string) {
-        this.mesh.name = name;
+        this.object.name = name;
     }
 }

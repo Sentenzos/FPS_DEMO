@@ -1,0 +1,11 @@
+Model Information:
+* title:	Soldier Final Animations Fbx
+* source:	https://sketchfab.com/3d-models/soldier-final-animations-fbx-ad2450c22d664317b36ccfd2e81016ea
+* author:	Zow (https://sketchfab.com/ZowJr)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Soldier Final Animations Fbx" (https://sketchfab.com/3d-models/soldier-final-animations-fbx-ad2450c22d664317b36ccfd2e81016ea) by Zow (https://sketchfab.com/ZowJr) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
