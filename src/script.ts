@@ -1,5 +1,10 @@
-import Main from "./retrowave/Main";
 import './style.css';
+import {World} from "./World/World";
+import * as THREE from 'three';
 
 const canvas: HTMLCanvasElement = document.querySelector('.webgl');
-new Main(canvas);
+
+//@ts-ignore
+window._world = new World(new THREE.Scene(), canvas);
+//@ts-ignore
+window._three = THREE;
